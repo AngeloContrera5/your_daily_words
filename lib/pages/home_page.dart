@@ -10,6 +10,8 @@ import 'package:your_daily_words/models/Words.dart';
 import 'package:http/http.dart' as http;
 import 'package:your_daily_words/providers/words_provider.dart';
 import 'package:your_daily_words/widget/gallery_words.dart';
+import 'package:your_daily_words/widget/navigation_drawer_widget.dart';
+import 'package:translator/translator.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, this.title}) : super(key: key);
@@ -27,6 +29,8 @@ class _HomePageState extends State<HomePage> {
   bool _speechEnabled = false;
   String _lastWords = '';
   bool listening = false;
+
+  String textoTraducido = "";
 
   @override
   void initState() {
@@ -69,10 +73,10 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
-  /* Future traduccion() async {
+  Future traduccion() async {
     final textTranslator = await _lastWords.translate(from: "en", to: "es");
     textoTraducido = textTranslator.text;
-  } */
+  }
 
   /// This is the callback that the SpeechToText plugin calls when
   /// the platform returns recognized words.
@@ -91,9 +95,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawer: NavigatorDrawerWidget(),
         appBar: AppBar(
           title: Text(
-            widget.title,
+            'MY DAILY WORDS',
             style: TextStyle(
                 fontSize: 27, color: Colors.white, fontWeight: FontWeight.bold),
           ),
@@ -112,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   Expanded(
                       child: SizedBox(
-                    height: 400,
+                    height: 230,
                     child: GalleryWords(),
                   ))
                 ],

@@ -21,11 +21,12 @@ class _GalleryWordsState extends State<GalleryWords> {
   void initState() {
     super.initState();
     _listWords = _getWords();
-    getDataFromList();
+    _getWords();
+    // getDataFromList();
   }
 
   Future<List<Words>> _getWords() async {
-    String url = "http://localhost:3000/words";
+    String url = "https://api-ydw-contreras.herokuapp.com/api/v1/words/1";
     final response = await http.get(Uri.parse(url));
 
     List<Words> words = [];
@@ -36,8 +37,11 @@ class _GalleryWordsState extends State<GalleryWords> {
       final jsonData = jsonDecode(body);
 
       for (var item in jsonData) {
-        words.add(Words(item["id_word"], item["words_eng"], item["words_esp"]));
+        words.add(Words(item["idWord"], item["wordsEng"], item["wordsEsp"]));
       }
+
+      print(jsonData[0]["wordsEng"].toString());
+
       return words;
     } else {
       throw Exception("Fallo _getWords");
@@ -53,7 +57,7 @@ class _GalleryWordsState extends State<GalleryWords> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CarouselSlider(
+      body: /* CarouselSlider(
         options: CarouselOptions(height: 400.0),
         items: _listTempWords.map((i) {
           return Builder(
@@ -69,44 +73,44 @@ class _GalleryWordsState extends State<GalleryWords> {
             },
           );
         }).toList(),
-      ),
+      ), */
 
-      /* FutureBuilder(
-          future: _listWords,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView(
-                scrollDirection: Axis.horizontal,
-                children: _listadoWords(snapshot.data),
-              );
-            } else if (snapshot.hasError) {
-              print(snapshot.error);
-              return Text("error");
-            }
+          FutureBuilder(
+              future: _listWords,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: _listadoWords(snapshot.data),
+                  );
+                } else if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return Text("error");
+                }
 
-            return Center(child: CircularProgressIndicator());
-          }), */
+                return Center(child: CircularProgressIndicator());
+              }),
     );
   }
 
   List<Widget> _listadoWords(data) {
     List<Widget> words = [];
     for (var word in data) {
-      words.add(Card(
-          child: Column(
-        children: [
-          Container(
-              height: 92,
-              color: Colors.orangeAccent,
-              child: Padding(
-                padding: const EdgeInsets.all(22.5),
-                child: Text(
-                  word.wordsEng!,
-                  style: TextStyle(fontSize: 40),
-                ),
-              )),
-        ],
-      )));
+      words.add(Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: RaisedButton(
+          onPressed: () {
+            print(word.idWord);
+          },
+          child: Padding(
+            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.20),
+            child: Text(
+              word.wordsEng,
+              style: TextStyle(fontSize: 60),
+            ),
+          ),
+        ),
+      ));
     }
     return words;
   }

@@ -15,6 +15,10 @@ class Words {
     wordsEsp = json['words_esp'];
   }
 
+  /*  Words.fromJson(dynamic json) {
+    Words(json['id_word'], json['words_eng'], json['words_esp']);
+  } */
+
   /*  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id_word'] = this.idWord;
